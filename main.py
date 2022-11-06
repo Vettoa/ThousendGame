@@ -61,36 +61,27 @@ class Thousend:
 
         return self.players_points
 
-    def i_dont_know(self):
+    def pc_card(self, card_p1): #Computer choose a card to play:
         self.numbers = {'Ace': 11, 'King': 4, 'Queen': 3, 'Jack': 2, '10': 10, '9': 0}
         self.figures = {'Spades': 40, 'Clubs': 60, 'Diamonds': 80, 'Hearts': 100}
-        players = [self.players1, self.players2]
-        player_points = []
-        for x in players:
-            points = 0
-            for y in x:
-                splited_player = y.split(' ')
-                points += self.numbers[splited_player[1]]
-            player_points.append(points)
-        #self.add_points(player_points[0], player_points[1])
+        card = card_p1.split(' ')
+        playable_cards_pc = {}
 
-        if 'Clubs Queen' in self.players1 and 'Clubs King' in self.players1:
-            #self.add_points(self.figures['Clubs'])
-            player_points[0] += self.figures['Clubs']
+        for x in self.players2: #checking which the player can play card
+            if card[0] in x:
+                playable_cards_pc[x] = self.numbers[x.split(' ')[1]]
 
-        if 'Diamonds Queen' in self.players1 and 'Diamonds King' in self.players1:
-            #self.add_points(self.figures['Diamonds'])
-            player_points[0] += self.figures['Diamonds']
+        for x in playable_cards_pc: #Searchs the bigger card than player1
+            if playable_cards_pc[x] > self.numbers[card[1]]:
+                return x
 
-        if 'Hearts Queen' in self.players1 and 'Hearts King' in self.players1:
-            #self.add_points(self.figures['Hearts'])
-            player_points[0] += self.figures['Hearts']
-
-        if 'Spades Queen' in self.players1 and 'Spades King' in self.players1:
-            #self.add_points(self.figures['Spades'])
-            player_points[0] += self.figures['Spades']
-
-        return player_points
+        if len(playable_cards_pc) == 0: #Searchs the lowest card than player1
+            player2_cards = {}
+            for x in self.players2:
+                player2_cards[x] = self.numbers[x.split(' ')[1]]
+            return min(player2_cards)
+        else:
+            return min(playable_cards_pc)
 
     def auction(self):
         clubs, diamonds, hearts, spades = 0, 0, 0, 0
@@ -113,28 +104,10 @@ class Thousend:
 
         return players_max_bid
 
-    def checking_auction(self, bid_p1, bid_p2):
+    def checking_auction(self, bid_p1, bid_p2=100): #checking if the player has entered the correct number
         bids = [bid_p1, bid_p2]
         for x in bids:
             if x < 100 or x > self.auction()[bids.index(x)]:
                 return False
         return True
 
-    #def game(self, card_p1, card_p2):
-
-
-
-
-
-
-g1 = Thousend(2)
-
-print(g1.players1)
-print(g1.players2)
-#print(g1.players3)
-#print(g1.players4)
-print(len(g1.deck))
-print(g1.i_dont_know())
-print(g1.players_points)
-#print(g1.auction())
-print(g1.checking_auction(100,100))
